@@ -3,14 +3,22 @@ import socket
 
 #mostly taken from socket documentation and cewing's walkthru
 
-def msgsend(mess):
+def msgsend(mess, portnum=17745):
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect( ("", 7539) )
+    client.connect( ("", portnum) )
     client.sendall(mess)
-    data = client.recv(1024)
+    client.shutdown(socket.SHUT_WR)
+    data = ""
+    mybuff = client.recv(1024)
+    while mybuff:
+        data += mybuff
+        mybuff = client.recv(1024)
     client.close()
     return data
 
 if __name__ == '__main__':
-    if sys.argv[1]:
-        print "Response: " + msgsend(str(sys.argv[1]))
+    if len(sys.argv) >= 2:
+        msg = sys.argv[1]
+    else:
+        msg = input("input request:\n")
+    print "Response:\n" + msgsend(msg)
