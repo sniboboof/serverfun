@@ -30,7 +30,7 @@ def file_found(step):
 @step('it returns a proper response containing the data')
 def check_file_found(step):
     assert world.string.split()[1] == u'200', "got %s" % world.string.split()[1]
-    assert world.string.split('\n')[1].split()[1] == u'text/plain'
+    assert world.string.split('\n')[2].split()[1] == u'file'
 
 @step('the request was for a proper directory')
 def folder_found(step):

@@ -1,5 +1,6 @@
 import socket
 import os
+import datetime
 
 #give it the request string
 #it will parse it and return the response
@@ -7,35 +8,47 @@ def getResponse(requeststring):
     responsestring = "HTTP/1.1"
     
     requesttokens = requeststring.split('\n', 1)[0].split(None, 3)
-    if requesttokens[0] == "GET" and (requesttokens[2] == "HTTP/1.1" or requesttokens[2] == "HTTP/1.0"):
-        responsestring += get_request(requesttokens[1])
+    if requesttokens[0] == "GET" \
+    and requesttokens[2][:-1] == "HTTP/1.":
+        responsestring += get_request(os.getcwd()+requesttokens[1])
     else:
         responsestring += bad_request()
     
-    responsestring += "\r\n"
     return responsestring
 
 def get_request(filepath):
     message = ""
     
-    if os.path.exists(os.getcwd()+filepath):
-        if os.path.isdir(os.getcwd()+filepath):
-            message = get_dir_info(os.open(os.getcwd()+filepath))
+    if os.path.exists(filepath):
+        message = " 200 OK\r\n"
+        if os.path.isdir(filepath):
+            message += get_dir_info(filepath)
         else:
-            message = get_file_info(os.open(os.getcwd()+filepath))
+            message += get_file_info(filepath)
     else:
-        message = " 404 File Not Found"
+        message = " 404 File Not Found\r\n"
     
     return message
 
 def get_dir_info(requesteddir):
     return ""
 
-def get_file_info(requestedfile):
-    return ""
+def get_file_info(requestedfilepath):
+    requestedfile = open(requestedfilepath, "r")
+    content = requestedfile.read()
+    
+    message = "Date: "
+    message += str(datetime.datetime.now()) + " GMT\r\n"
+    message += "Content-Type: file\r\n"
+    message += "Content-Length: " + str(len(content)) + "\r\n"
+    message += "\r\n"
+    
+    message += content
+    
+    return message
 
 def bad_request():
-    return " 400 Bad Request"
+    return " 400 Bad Request\r\n"
 
 def simple_server_loop(portnum=17745):
     httpserv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
