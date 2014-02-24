@@ -31,19 +31,35 @@ def get_request(filepath):
     return message
 
 def get_dir_info(requesteddir):
-    return ""
+    dircontents = os.listdir(requesteddir)
+    
+    payload = ""
+    for singlefile in dircontents:
+        if os.path.isdir(requesteddir+'/'+singlefile):
+            payload += "dir: "
+        else:
+            payload += "file: "
+        payload += singlefile + "\r\n"
+        
+        
+    message = "Date: " + str(datetime.datetime.now()) + " GMT\r\n"
+    message += "Content-Type: directory\r\n"
+    message += "Content-Length: " + str(len(payload)) + "\r\n"
+    message += "\r\n"
+    
+    message += payload + "\r\n"
+    return message
 
 def get_file_info(requestedfilepath):
     requestedfile = open(requestedfilepath, "r")
     content = requestedfile.read()
     
-    message = "Date: "
-    message += str(datetime.datetime.now()) + " GMT\r\n"
+    message = "Date: " + str(datetime.datetime.now()) + " GMT\r\n"
     message += "Content-Type: file\r\n"
     message += "Content-Length: " + str(len(content)) + "\r\n"
     message += "\r\n"
     
-    message += content
+    message += content + "\r\n"
     
     return message
 

@@ -39,5 +39,4 @@ def folder_found(step):
 @step('it returns a proper response containing the contents')
 def check_folder_found(step):
     assert world.string.split()[1] == u'200', "got %s" % world.string.split()[1]
-    assert world.string.split('\n')[1].split()[1] == u'directory'
-    assert world.string.split('\r\n')[1] == u'christmas.py\temptydir\tempty.txt\tworthless.c'
+    assert world.string.split('\n')[2].split()[1] == u'directory'
