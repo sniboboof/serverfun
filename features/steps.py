@@ -13,7 +13,7 @@ def parse_request(step):
 
 @step('it returns a bad request error')
 def check_if_error(step):
-    assert world.string.split()[1] == u'400'
+    assert world.string.split()[1] == u'400', "got %s" % world.string.split()[1]
 
 @step('the request was for a nonexistent file')
 def no_file(step):
@@ -21,7 +21,7 @@ def no_file(step):
 
 @step('it returns a file not found response')
 def check_file_404(step):
-    assert world.string.split()[1] == u'404'
+    assert world.string.split()[1] == u'404', "got %s" % world.string.split()[1]
 
 @step('the request was for a proper file')
 def file_found(step):
@@ -29,7 +29,7 @@ def file_found(step):
 
 @step('it returns a proper response containing the data')
 def check_file_found(step):
-    assert world.string.split()[1] == u'200'
+    assert world.string.split()[1] == u'200', "got %s" % world.string.split()[1]
     assert world.string.split('\n')[1].split()[1] == u'text/plain'
 
 @step('the request was for a proper directory')
@@ -38,6 +38,6 @@ def folder_found(step):
 
 @step('it returns a proper response containing the contents')
 def check_folder_found(step):
-    assert world.string.split()[1] == u'200'
+    assert world.string.split()[1] == u'200', "got %s" % world.string.split()[1]
     assert world.string.split('\n')[1].split()[1] == u'directory'
     assert world.string.split('\r\n')[1] == u'christmas.py\temptydir\tempty.txt\tworthless.c'
