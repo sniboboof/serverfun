@@ -1,3 +1,5 @@
+Exercise for Code Fellows
+
 httpserver.py runs a simple http server that will accept requests and return responses
 
 it should open up a socket with the client and accept a requests
